@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "cssprefix": "^2.0.16",
     "firebase": "^6.4.0",
+    "leader-line": "^1.0.5",
     "m-class-list": "^1.1.9",
     "plain-draggable": "^2.5.12",
     "pointer-event": "^1.0.0",

@@ -2,6 +2,7 @@
   <div class="patchcable">
     <svg ref="stage" id="stage" version="1.1">
       <circle
+        draggable="true"
         ref="p0"
         id="p0"
         class="cat circle circle--patch-point"
@@ -26,8 +27,6 @@
 </template>
 
 <script>
-import PlainDraggable from "plain-draggable";
-
 export default {
   name: "PatchCable",
   data() {
@@ -40,20 +39,6 @@ export default {
         p3: { x: 380, y: 120 }
       }
     };
-  },
-  mounted() {
-    new PlainDraggable(this.$refs.p0, {
-      // containment: field,
-      // onMove: function() {
-      //   update(this.rect, vm.xy.p0);
-      // }
-    });
-    new PlainDraggable(this.$refs.p1, {
-      // containment: field,
-      // onMove: function() {
-      //   update(this.rect, vm.xy.p1);
-      // }
-    });
   }
 };
 </script>

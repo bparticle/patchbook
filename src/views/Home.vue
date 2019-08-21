@@ -1,18 +1,17 @@
 <template>
   <div class="home">
-    <PatchCable
-      v-for="patchCable in patchCables"
-      :cableId="patchCable.id"
-      :key="patchCable.id"
+    <Instrument
+      v-for="instrument in instruments"
+      :imgSrc="instrument.img"
+      :id="instrument.id"
+      :key="instrument.id"
     />
-    <Instrument />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Instrument from "@/components/Instrument.vue";
-import PatchCable from "@/components/PatchCable";
 
 export default {
   name: "home",
@@ -22,12 +21,17 @@ export default {
         {
           id: 0
         }
+      ],
+      instruments: [
+        {
+          id: "instrument-00",
+          img: "modulargrid_732076.jpg"
+        }
       ]
     };
   },
   components: {
-    Instrument,
-    PatchCable
+    Instrument
   }
 };
 </script>
