@@ -1,16 +1,9 @@
 <template>
-  <div class="instrument">
-    <PatchCable />
-  </div>
+  <div class="instrument"></div>
 </template>
 
 <script>
-import PatchCable from "@/components/PatchCable";
-
 export default {
-  name: "Instrument",
-  components: {
-    PatchCable
-  }
+  name: "Instrument"
 };
 </script>
