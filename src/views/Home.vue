@@ -35,3 +35,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.home {
+  margin: 50px auto;
+  max-width: 900px;
+}
+</style>

@@ -26,7 +26,6 @@
       />
     </svg>
     <img class="instrument__img" ref="img" :src="imgSrcPath" alt="" />
-    <p class="instrument__size" v-if="size">{{ size.w }} x {{ size.h }}</p>
   </div>
 </template>
 

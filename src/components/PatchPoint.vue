@@ -36,20 +36,17 @@ export default {
   mounted() {
     this.draggable = new this.$plaindraggable(this.$refs.circle, {
       leftTop: true,
-      containment: this.rect,
-      onMove: function() {
-        console.log("yoyo");
-      }
+      containment: this.rect
     });
-    this.draggable.snap = { step: 20 };
+    this.draggable.snap = { step: 5 };
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .circle {
-  fill: rgb(88, 87, 87);
-  stroke: #177cf3;
+  fill: rgba(88, 87, 87, 0.5);
+  stroke: rgba(23, 124, 243, 0.8);
   stroke-width: 3px;
 }
 </style>
