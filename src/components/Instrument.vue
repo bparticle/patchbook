@@ -1,5 +1,13 @@
 <template>
   <div class="instrument">
+    <transition name="fade">
+      <PatchPointDialog
+        v-if="infoDialog"
+        :event="clickEvent"
+        v-on:send-details="pushDetails"
+        v-on:close-dialog="closeDialog"
+      />
+    </transition>
     <svg
       v-if="size"
       ref="stage"
@@ -7,7 +15,7 @@
       version="1.1"
       :width="size.w"
       :viewBox="svgViewBox"
-      @click="addPatchPoint($event)"
+      @click="getPatchPointInfo($event)"
     >
       <rect
         ref="rect"
@@ -24,19 +32,26 @@
         :rect="$refs.rect"
         :id="patchPoint.id"
         :key="patchPoint.id"
+        :transform="patchPoint.transform"
       />
     </svg>
     <img class="instrument__img" ref="img" :src="imgSrcPath" alt="" />
+    <div v-if="size" class="size">{{ size.w }} x {{ size.h }}</div>
+    <PatchPointReference />
   </div>
 </template>
 
 <script>
 import PatchPoint from "@/components/PatchPoint";
+import PatchPointDialog from "@/components/PatchPointDialog";
+import PatchPointReference from "@/components/PatchPointReference";
 
 export default {
   name: "Instrument",
   components: {
-    PatchPoint
+    PatchPoint,
+    PatchPointDialog,
+    PatchPointReference
   },
   props: {
     id: {
@@ -50,6 +65,8 @@ export default {
   },
   data() {
     return {
+      infoDialog: false,
+      clickEvent: "",
       size: null,
       svgViewBox: null
     };
@@ -66,12 +83,25 @@ export default {
     }
   },
   methods: {
-    addPatchPoint(e) {
+    addPatchPoint(details) {
+      // Get patch point details from user first, then store
+      this.$store.commit("addPatchPoint", {
+        event: this.clickEvent,
+        id: this.id,
+        details: details
+      });
+    },
+    pushDetails(details) {
+      this.addPatchPoint(details);
+      this.infoDialog = false;
+    },
+    closeDialog() {
+      this.infoDialog = false;
+    },
+    getPatchPointInfo(event) {
       if (this.setMode) {
-        this.$store.commit("addPatchPoint", {
-          event: e,
-          id: this.id
-        });
+        this.clickEvent = event;
+        this.infoDialog = true;
       } else {
         this.$store.commit(
           "setMessage",
@@ -119,5 +149,13 @@ export default {
       fill: rgba($color: #15c, $alpha: 0.3);
     }
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -7,11 +7,10 @@
       'circle--set': setMode,
       'circle--clear': clearMode
     }"
-    :cx="placement.x"
-    :cy="placement.y"
+    :cx="placement.left"
+    :cy="placement.top"
     :r="r"
-    style="-webkit-tap-highlight-color: transparent; box-shadow: transparent 0px 0px 1px; cursor: grab; user-select: none;"
-    transform="translate(0 0)"
+    :transform="transform"
   />
 </template>
 
@@ -29,6 +28,10 @@ export default {
     },
     rect: {
       type: SVGRectElement,
+      required: false
+    },
+    transform: {
+      type: String,
       required: false
     }
   },
@@ -63,16 +66,15 @@ export default {
     this.draggable = new this.$plaindraggable(this.$refs.circle, {
       leftTop: true,
       containment: this.rect,
-      onDrag: vm.patchFrom
-      // onDragEnd: function(newPosition) {
-      //   vm.$store.commit("setNewPosition", {
-      //     id: vm.id ,
-      //     newPosition: {
-      //       x: newPosition.left,
-      //       y: newPosition.top
-      //     }
-      //   });
-      // }
+      onDrag: vm.patchFrom,
+      onDragEnd: function() {
+        vm.$store.commit("setNewPosition", {
+          id: vm.id,
+          transform: window
+            .getComputedStyle(vm.$refs.circle)
+            .getPropertyValue("transform")
+        });
+      }
     });
     this.draggable.snap = { step: 5 };
     this.draggable.disabled = !this.setMode;
@@ -85,7 +87,7 @@ export default {
   fill: rgba(88, 87, 87, 0.5);
   stroke: rgba(23, 124, 243, 0.8);
   stroke-width: 3px;
-  transform: translate(0 0) !important;
+  // transform: translate(0 0) !important;
   &--set {
     stroke: rgba(23, 240, 200, 1);
   }

@@ -2,10 +2,12 @@ export default {
   addPatchPoint(state, payload) {
     state.patchPoints.push({
       placement: {
-        x: payload.event.layerX,
-        y: payload.event.layerY
+        left: payload.event.layerX,
+        top: payload.event.layerY
       },
-      id: payload.id + "_" + (state.patchPoints.length + 1)
+      id: payload.id + "_" + (state.patchPoints.length + 1),
+      details: payload.details,
+      transform: "translate(0 0)"
     });
   },
   clearPatchPoints(state) {
@@ -25,7 +27,7 @@ export default {
   setNewPosition(state, payload) {
     state.patchPoints.forEach(patchPoint => {
       if (patchPoint.id === payload.id) {
-        patchPoint.placement = payload.newPosition;
+        patchPoint.transform = payload.transform + "translate(0 0)";
       }
     });
   },
