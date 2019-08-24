@@ -1,6 +1,6 @@
 <template>
   <circle
-    @click="patchFrom"
+    @click="clickPatchPoint"
     ref="circle"
     class="circle circle--patch-point"
     :class="{
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+/* global Draggable */
 export default {
   name: "PatchPoint",
   props: {
@@ -25,10 +26,6 @@ export default {
     placement: {
       type: Object,
       required: true
-    },
-    rect: {
-      type: SVGRectElement,
-      required: false
     },
     transform: {
       type: String,
@@ -42,6 +39,9 @@ export default {
     };
   },
   computed: {
+    rect() {
+      return this.$parent.$refs.rect;
+    },
     setMode() {
       return this.$store.state.setMode;
     },
@@ -51,23 +51,45 @@ export default {
   },
   watch: {
     setMode() {
-      this.draggable.disabled = !this.setMode;
-    }
-  },
-  methods: {
-    patchFrom() {
-      if (!this.setMode) {
-        this.$store.commit("setMessage", "You're patching!");
+      if (this.setMode === false) {
+        this.draggable[0].disable();
+      } else {
+        this.draggable[0].enable();
       }
     }
   },
+  methods: {
+    clickPatchPoint() {
+      if (!this.setMode) {
+        this.$store.commit("selectPatchPoint", this.id);
+        this.$store.commit("setMessage", "You're patching!");
+      } else if (this.clearMode) {
+        this.$store.commit("removePatchPoint", this.id);
+      }
+    },
+    selectPatchPoint() {},
+    setClickAction() {}
+  },
   mounted() {
     const vm = this;
-    this.draggable = new this.$plaindraggable(this.$refs.circle, {
-      leftTop: true,
-      containment: this.rect,
+    this.draggable = Draggable.create(this.$refs.circle, {
+      type: "x,y",
+      cursor: "grab",
+      bounds: vm.rect,
+      liveSnap: {
+        x: value => {
+          return Math.round(value / 3) * 3;
+        },
+        y: value => {
+          return Math.round(value / 3) * 3;
+        }
+      },
       onDrag: vm.patchFrom,
+      onClick: () => {
+        console.log("patching!");
+      },
       onDragEnd: function() {
+        console.log("done dragging");
         vm.$store.commit("setNewPosition", {
           id: vm.id,
           transform: window
@@ -76,8 +98,9 @@ export default {
         });
       }
     });
-    this.draggable.snap = { step: 5 };
-    this.draggable.disabled = !this.setMode;
+    if (!this.setMode) {
+      this.draggable[0].disable();
+    }
   }
 };
 </script>

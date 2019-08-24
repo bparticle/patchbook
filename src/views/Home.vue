@@ -6,7 +6,13 @@
     <button class="button button--set" @click="toggleSetMode">
       {{ clickAction }}
     </button>
-    <button class="button button--clear" @click="toggleClearMode">Clear</button>
+    <button
+      class="button button--clear"
+      :class="{ active: clearMode }"
+      @click="toggleClearMode"
+    >
+      Clear
+    </button>
     <button class="button button--clear-all" @click="clearPatchPoints">
       Clear All
     </button>
@@ -38,11 +44,14 @@ export default {
     setMode() {
       return this.$store.state.setMode;
     },
+    clearMode() {
+      return this.$store.state.clearMode;
+    },
     clickAction() {
       if (this.setMode) {
         return "Patch";
       } else {
-        return "Set";
+        return "Map";
       }
     }
   },
@@ -63,6 +72,9 @@ export default {
     clearPatchPoints() {
       this.$store.commit("clearPatchPoints");
     }
+  },
+  mounted() {
+    this.$store.commit("unselectAll");
   }
 };
 </script>
@@ -96,6 +108,10 @@ button {
   background-color: #545454;
   padding: 8px 20px;
   margin: 15px 25px;
+
+  &.active {
+    background-color: #287e94;
+  }
 }
 
 .fade-enter-active,

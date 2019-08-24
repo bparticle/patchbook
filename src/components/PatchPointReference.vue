@@ -1,8 +1,13 @@
 <template>
   <div class="patchpoint-reference">
-    <div v-for="patchPoint in patchPoints" :key="patchPoint.id">
-      {{ patchPoint.details }}<br />
-      X: {{ patchPoint.placement.left }} Y:{{ patchPoint.placement.top }}
+    <h3>Patch points</h3>
+    <div
+      class="patchpoint-reference__patchpoint"
+      v-for="patchPoint in patchPoints"
+      :key="patchPoint.id"
+      :class="{ selected: patchPoint.selected }"
+    >
+      > {{ patchPoint.name }}
     </div>
   </div>
 </template>
@@ -20,6 +25,23 @@ export default {
 
 <style lang="scss" scoped>
 .patchpoint-reference {
-  padding: 25px;
+  padding: 25px 0;
+  text-align: left;
+  color: #545454;
+  font-size: 0.8em;
+  &__patchpoint {
+    &.selected {
+      animation: colorPulseSet 0.4s infinite alternate;
+    }
+  }
+}
+
+@keyframes colorPulseSet {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: greenyellow;
+  }
 }
 </style>

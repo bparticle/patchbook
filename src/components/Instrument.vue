@@ -84,11 +84,10 @@ export default {
   },
   methods: {
     addPatchPoint(details) {
-      // Get patch point details from user first, then store
       this.$store.commit("addPatchPoint", {
         event: this.clickEvent,
         id: this.id,
-        details: details
+        name: details
       });
     },
     pushDetails(details) {
@@ -102,11 +101,6 @@ export default {
       if (this.setMode) {
         this.clickEvent = event;
         this.infoDialog = true;
-      } else {
-        this.$store.commit(
-          "setMessage",
-          "You must be in Set Mode to add patch points"
-        );
       }
     },
     setSize() {
