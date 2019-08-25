@@ -21,6 +21,8 @@ export default {
     });
   },
   addPatchCable(state, payload) {
+    console.log(payload.element);
+
     state.patchCables.push({
       from: "",
       to: "",

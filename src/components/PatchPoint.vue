@@ -79,7 +79,8 @@ export default {
     },
     addCable() {
       this.$store.commit("addPatchCable", {
-        placement: this.placement
+        placement: this.placement,
+        element: this.$refs.circle
       });
     }
   },

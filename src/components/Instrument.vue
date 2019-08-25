@@ -151,7 +151,7 @@ export default {
         nW: this.$refs.img.naturalWidth,
         nH: this.$refs.img.naturalHeight
       };
-      this.svgViewBox = "0 0 " + this.size.nW + " " + this.size.nH;
+      this.svgViewBox = "0 0 " + this.size.w + " " + this.size.h;
     },
     toggleSetMode() {
       this.$store.commit("toggleSetMode", this.id);
