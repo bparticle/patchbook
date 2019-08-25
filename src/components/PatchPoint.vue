@@ -19,6 +19,10 @@
 export default {
   name: "PatchPoint",
   props: {
+    instrument: {
+      type: String,
+      required: true
+    },
     id: {
       type: String,
       required: true
@@ -43,10 +47,10 @@ export default {
       return this.$parent.$refs.rect;
     },
     setMode() {
-      return this.$store.state.setMode;
+      return this.$store.getters.setMode(this.instrument);
     },
     clearMode() {
-      return this.$store.state.clearMode;
+      return this.$store.getters.clearMode(this.instrument);
     }
   },
   watch: {
@@ -60,15 +64,24 @@ export default {
   },
   methods: {
     clickPatchPoint() {
+      this.selectPatchPoint();
       if (!this.setMode) {
-        this.$store.commit("selectPatchPoint", this.id);
-        this.$store.commit("setMessage", "You're patching!");
+        this.addCable();
       } else if (this.clearMode) {
         this.$store.commit("removePatchPoint", this.id);
       }
     },
-    selectPatchPoint() {},
-    setClickAction() {}
+    selectPatchPoint() {
+      this.$store.commit("selectPatchPoint", {
+        id: this.id,
+        instrument: this.instrument
+      });
+    },
+    addCable() {
+      this.$store.commit("addPatchCable", {
+        placement: this.placement
+      });
+    }
   },
   mounted() {
     const vm = this;
@@ -84,13 +97,9 @@ export default {
           return Math.round(value / 3) * 3;
         }
       },
-      onDrag: vm.patchFrom,
-      onClick: () => {
-        console.log("patching!");
-      },
       onDragEnd: function() {
-        console.log("done dragging");
         vm.$store.commit("setNewPosition", {
+          instrument: vm.instrument,
           id: vm.id,
           transform: window
             .getComputedStyle(vm.$refs.circle)
@@ -108,14 +117,11 @@ export default {
 <style lang="scss" scoped>
 .circle {
   fill: rgba(88, 87, 87, 0.5);
-  stroke: rgba(23, 124, 243, 0.8);
+  stroke: rgba(23, 124, 243, 0.3);
   stroke-width: 3px;
   // transform: translate(0 0) !important;
   &--set {
     stroke: rgba(23, 240, 200, 1);
-  }
-  &--freeze {
-    transform: none !important;
   }
 }
 </style>

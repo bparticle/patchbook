@@ -3,19 +3,6 @@
     <transition name="fade">
       <div v-show="message" class="messages">{{ message }}</div>
     </transition>
-    <button class="button button--set" @click="toggleSetMode">
-      {{ clickAction }}
-    </button>
-    <button
-      class="button button--clear"
-      :class="{ active: clearMode }"
-      @click="toggleClearMode"
-    >
-      Clear
-    </button>
-    <button class="button button--clear-all" @click="clearPatchPoints">
-      Clear All
-    </button>
     <Instrument
       v-for="instrument in instruments"
       :imgSrc="instrument.img"
@@ -40,19 +27,6 @@ export default {
     },
     instruments() {
       return this.$store.state.instruments;
-    },
-    setMode() {
-      return this.$store.state.setMode;
-    },
-    clearMode() {
-      return this.$store.state.clearMode;
-    },
-    clickAction() {
-      if (this.setMode) {
-        return "Patch";
-      } else {
-        return "Map";
-      }
     }
   },
   watch: {
@@ -60,17 +34,6 @@ export default {
       setTimeout(() => {
         this.$store.commit("setMessage", "");
       }, 3000);
-    }
-  },
-  methods: {
-    toggleSetMode() {
-      this.$store.commit("toggleSetMode");
-    },
-    toggleClearMode() {
-      this.$store.commit("toggleClearMode");
-    },
-    clearPatchPoints() {
-      this.$store.commit("clearPatchPoints");
     }
   },
   mounted() {
@@ -84,13 +47,6 @@ export default {
   margin: 50px auto;
   max-width: 900px;
 }
-
-button {
-  &:focus {
-    outline: none;
-  }
-}
-
 .messages {
   top: 50px;
   left: 0;
@@ -100,18 +56,6 @@ button {
   height: 40px;
   padding: 20px 0;
   box-shadow: 0 0 5px #545454;
-}
-
-.button {
-  border: 0;
-  color: #fff;
-  background-color: #545454;
-  padding: 8px 20px;
-  margin: 15px 25px;
-
-  &.active {
-    background-color: #287e94;
-  }
 }
 
 .fade-enter-active,

@@ -1,29 +1,19 @@
 <template>
-  <div class="patchcable">
-    <svg ref="stage" id="stage" version="1.1">
-      <circle
-        draggable="true"
-        ref="p0"
-        id="p0"
-        class="cat circle circle--patch-point"
-        :cx="xy.p0.x"
-        :cy="xy.p0.y"
-        :r="r"
-        style="-webkit-tap-highlight-color: transparent; box-shadow: transparent 0px 0px 1px; cursor: grab; user-select: none;"
-        transform="translate(0 0)"
-      />
-      <circle
-        ref="p1"
-        id="p1"
-        class="cat circle circle--bezier-handle"
-        :cx="xy.p1.x"
-        :cy="xy.p1.y"
-        :r="r"
-        style="-webkit-tap-highlight-color: transparent; box-shadow: transparent 0px 0px 1px; cursor: grab; user-select: none;"
-        transform="translate(0 0)"
-      />
-    </svg>
-  </div>
+  <g>
+    <path class="path" />
+    <circle
+      class="handle circle circle--patch-point"
+      :cx="placement.fromPosition.x"
+      :cy="placement.fromPosition.y"
+      :r="r"
+    />
+    <circle
+      class="handle circle circle--bezier-handle"
+      :cx="placement.toPosition.x"
+      :cy="placement.toPosition.y"
+      :r="r"
+    />
+  </g>
 </template>
 
 <script>
@@ -31,22 +21,20 @@ export default {
   name: "PatchCable",
   data() {
     return {
-      r: 12,
-      xy: {
-        p0: { x: 36, y: 160 },
-        p1: { x: 80, y: 40 },
-        p2: { x: 240, y: 220 },
-        p3: { x: 380, y: 120 }
-      }
+      r: 7
     };
+  },
+  props: {
+    placement: {
+      type: Object,
+      required: true
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .circle {
-  fill: rgb(88, 87, 87);
-  stroke: #177cf3;
-  stroke-width: 3px;
+  fill: rgb(78, 77, 77);
 }
 </style>

@@ -15,9 +15,15 @@
 <script>
 export default {
   name: "PatchPointReference",
+  props: {
+    instrument: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
     patchPoints() {
-      return this.$store.state.patchPoints;
+      return this.$store.getters.patchPoints(this.instrument);
     }
   }
 };
