@@ -12,6 +12,7 @@
       v-on:keyup.esc="kill"
     />
     <button @click="submit" type="submit">Add</button>
+    <button @click="kill" type="submit">X</button>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 export default {
   message: "",
+  clickEvent: "",
   patchCables: [],
   instruments: [
     {
