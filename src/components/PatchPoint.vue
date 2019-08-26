@@ -1,5 +1,6 @@
 <template>
   <circle
+    :id="id"
     @click="clickPatchPoint"
     ref="circle"
     class="circle circle--patch-point"
@@ -7,8 +8,6 @@
       'circle--set': setMode,
       'circle--clear': clearMode
     }"
-    :cx="placement.left"
-    :cy="placement.top"
     :r="r"
     :transform="transform"
   />
@@ -27,10 +26,6 @@ export default {
       type: String,
       required: true
     },
-    placement: {
-      type: Object,
-      required: true
-    },
     transform: {
       type: String,
       required: false
@@ -43,6 +38,9 @@ export default {
     };
   },
   computed: {
+    activeCable() {
+      return this.$store.getters.activeCable;
+    },
     rect() {
       return this.$parent.$refs.rect;
     },
@@ -51,6 +49,9 @@ export default {
     },
     clearMode() {
       return this.$store.getters.clearMode(this.instrument);
+    },
+    patchingMode() {
+      return this.$store.state.patchingMode;
     }
   },
   watch: {
@@ -66,10 +67,17 @@ export default {
     clickPatchPoint() {
       this.selectPatchPoint();
       if (!this.setMode) {
-        this.addCable();
+        if (this.patchingMode === false) {
+          this.addCable();
+        }
       } else if (this.clearMode) {
         this.$store.commit("removePatchPoint", this.id);
       }
+    },
+    cableClick() {
+      console.log("cableClick");
+      this.$store.commit("setPatchingMode", false);
+      document.removeEventListener("mousemove", this.followMouse);
     },
     selectPatchPoint() {
       this.$store.commit("selectPatchPoint", {
@@ -77,11 +85,25 @@ export default {
         instrument: this.instrument
       });
     },
+    followMouse(event) {
+      this.$store.commit("moveCableEnd", event);
+    },
     addCable() {
-      this.$store.commit("addPatchCable", {
-        placement: this.placement,
-        element: this.$refs.circle
-      });
+      this.$store.commit("setPatchingMode", true);
+      this.$store
+        .dispatch("addPatchCable", {
+          placement: {
+            x: this.$refs.circle.transform.baseVal[0].matrix.e,
+            y: this.$refs.circle.transform.baseVal[0].matrix.f
+          },
+          element: this.$refs.circle
+        })
+        .then(() => {
+          document.addEventListener("mousemove", this.followMouse);
+          setTimeout(() => {
+            document.addEventListener("click", this.cableClick);
+          }, 10);
+        });
     }
   },
   mounted() {

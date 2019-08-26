@@ -31,6 +31,7 @@
         <PatchCable
           v-for="patchCable in patchCables"
           :key="patchCable.id"
+          :id="patchCable.id"
           :placement="patchCable.placement"
         />
         <PatchPoint

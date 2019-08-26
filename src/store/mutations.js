@@ -8,7 +8,12 @@ export default {
             left: 0,
             top: 0
           },
-          id: payload.id + "_" + (instrument.patchPoints.length + 1),
+          id:
+            payload.id +
+            "_" +
+            (instrument.patchPoints.length + 1) +
+            "-" +
+            Math.floor(100000 + Math.random() * 900000),
           name: payload.name,
           transform:
             "matrix(1,0,0,1," +
@@ -20,19 +25,6 @@ export default {
       }
     });
   },
-  addPatchCable(state, payload) {
-    console.log(payload.element);
-
-    state.patchCables.push({
-      from: "",
-      to: "",
-      placement: {
-        fromPosition: { x: payload.placement.x, y: payload.placement.y },
-        toPosition: { x: 50, y: 150 }
-      },
-      id: Math.floor(100000 + Math.random() * 900000)
-    });
-  },
   clearPatchPoints(state, instrumentId) {
     const i = state.instruments.find(instrument => {
       return instrument.id === instrumentId;
@@ -42,6 +34,18 @@ export default {
   },
   setMessage(state, message) {
     state.message = message;
+  },
+  setPatchingMode(state, value) {
+    state.setPatchingMode = value;
+  },
+  moveCableEnd(state, event) {
+    const c = state.patchCables.find(cable => {
+      return cable.active === true;
+    });
+    c.placement.toPosition = {
+      x: event.offsetX,
+      y: event.offsetY
+    };
   },
   initializeStore(state) {
     // Check if patch points are stored in browser memory

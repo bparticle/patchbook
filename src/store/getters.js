@@ -16,5 +16,10 @@ export default {
       return instrument.id === instrumentId;
     });
     return i.mode.clearMode;
+  },
+  activeCable: state => {
+    return state.patchCables.find(cable => {
+      return cable.active === true;
+    });
   }
 };
