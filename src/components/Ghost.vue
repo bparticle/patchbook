@@ -1,6 +1,6 @@
 <template>
   <div class="ghost">
-    <svg :width="ghostWidth" :height="ghostHeight">
+    <svg :width="deskSize" :height="deskSize">
       <InstrumentClone
         v-for="instrument in instruments"
         :instrumentId="instrument.id"
@@ -22,11 +22,8 @@ export default {
     instruments() {
       return this.$store.state.instruments;
     },
-    ghostWidth() {
-      return "2500";
-    },
-    ghostHeight() {
-      return "2500";
+    deskSize() {
+      return this.$store.state.deskSize;
     }
   }
 };
@@ -34,6 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .ghost {
+  z-index: 5;
   pointer-events: none;
   position: absolute;
   top: 0;

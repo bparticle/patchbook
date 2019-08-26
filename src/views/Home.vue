@@ -3,13 +3,13 @@
     <transition name="fade">
       <div v-show="message" class="messages">{{ message }}</div>
     </transition>
+    <Ghost />
     <Instrument
       v-for="instrument in instruments"
       :imgSrc="instrument.img"
       :id="instrument.id"
       :key="instrument.id"
     />
-    <Ghost />
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   position: relative;
-  margin-top: 50px;
+  margin-top: 160px;
 }
 .messages {
   top: 50px;

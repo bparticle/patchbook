@@ -1,4 +1,5 @@
 export default {
+  deskSize: "2500",
   message: "",
   clickEvent: "",
   patchingMode: false,

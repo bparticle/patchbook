@@ -15,12 +15,10 @@ export default {
             "-" +
             Math.floor(100000 + Math.random() * 900000),
           name: payload.name,
-          transform:
-            "matrix(1,0,0,1," +
-            payload.event.layerX +
-            "," +
-            payload.event.layerY +
-            ")"
+          transform: {
+            x: payload.event.layerX,
+            y: payload.event.layerY
+          }
         });
       }
     });

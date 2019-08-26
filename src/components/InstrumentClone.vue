@@ -6,15 +6,33 @@
       :x="instrumentOffset.x"
       :y="instrumentOffset.y"
     ></rect>
-    <svg>
-      <circle r="20" fill="red" />
-    </svg>
+    <PatchCable
+      v-for="patchCable in patchCables"
+      :key="patchCable.id"
+      :id="patchCable.id"
+      :placement="patchCable.placement"
+    />
+    <PatchPoint
+      v-for="patchPoint in patchPoints"
+      :placement="instrumentDimensions"
+      :id="patchPoint.id"
+      :key="patchPoint.id"
+      :transform="patchPoint.transform"
+      :instrument="instrumentId"
+    />
   </g>
 </template>
 
 <script>
+import PatchPoint from "@/components/PatchPoint";
+import PatchCable from "@/components/PatchCable";
+
 export default {
   name: "InstrumentClone",
+  components: {
+    PatchPoint,
+    PatchCable
+  },
   props: {
     instrumentId: {
       type: String,
@@ -27,6 +45,12 @@ export default {
     },
     instrumentOffset() {
       return this.$store.getters.instrumentOffset(this.instrumentId);
+    },
+    patchPoints() {
+      return this.$store.getters.patchPoints(this.instrumentId);
+    },
+    patchCables() {
+      return this.$store.state.patchCables;
     }
   }
 };
@@ -34,8 +58,9 @@ export default {
 
 <style lang="scss" scoped>
 rect {
-  // fill: transparent;
-  fill: rgba($color: #15c, $alpha: 0.3);
+  fill: transparent;
+  stroke: rgba($color: #15c, $alpha: 0.3);
+  stroke-width: 4px;
   &--set {
     fill: rgba($color: #15c, $alpha: 0.3);
   }

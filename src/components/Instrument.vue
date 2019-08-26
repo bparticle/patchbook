@@ -39,41 +39,12 @@
           v-on:close-dialog="closeDialog"
         />
       </transition>
-      <svg
-        v-if="size"
-        ref="stage"
-        class="instrument__stage"
-        version="1.1"
-        :width="size.w"
-        :height="size.h"
-        :viewBox="svgViewBox"
+      <img
         @click="getPatchPointInfo($event)"
-      >
-        <rect
-          ref="rect"
-          class="instrument__rect"
-          :class="{ 'instrument__rect--set': setMode }"
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-        />
-        <PatchCable
-          v-for="patchCable in patchCables"
-          :key="patchCable.id"
-          :id="patchCable.id"
-          :placement="patchCable.placement"
-        />
-        <PatchPoint
-          v-for="patchPoint in patchPoints"
-          :placement="patchPoint.placement"
-          :id="patchPoint.id"
-          :key="patchPoint.id"
-          :transform="patchPoint.transform"
-          :instrument="id"
-        />
-      </svg>
-      <img class="instrument__img" ref="img" :src="imgSrcPath" alt />
+        class="instrument__img"
+        ref="img"
+        :src="imgSrcPath"
+      />
     </div>
     <PatchPointReference :instrument="id" />
   </div>
@@ -82,16 +53,12 @@
 <script>
 /* global Draggable */
 
-import PatchPoint from "@/components/PatchPoint";
-import PatchCable from "@/components/PatchCable";
 import PatchPointDialog from "@/components/PatchPointDialog";
 import PatchPointReference from "@/components/PatchPointReference";
 
 export default {
   name: "Instrument",
   components: {
-    PatchPoint,
-    PatchCable,
     PatchPointDialog,
     PatchPointReference
   },
@@ -121,9 +88,6 @@ export default {
     },
     instrumentDimensions() {
       return this.$store.getters.instrumentDimensions(this.id);
-    },
-    instrumentOffset() {
-      return this.$store.getters.instrumentOffset(this.id);
     },
     handleId() {
       return "handle" + this.id;
@@ -221,7 +185,7 @@ export default {
     // Make draggable
     const vm = this;
     const grabber = document.getElementById(this.handleId);
-    this.draggable = Draggable.create(this.$refs.instrument, {
+    Draggable.create(this.$refs.instrument, {
       type: "top,left",
       cursor: "grab",
       trigger: grabber,
@@ -250,10 +214,10 @@ export default {
   &__handle {
     position: absolute;
     margin-top: -30px;
-    left: 2px;
+    left: 3px;
     stroke: rgb(77, 77, 77);
     background: rgb(236, 236, 236);
-    box-shadow: 1px 0px 3px;
+    box-shadow: inset 0px -2px 1px rgba(0, 0, 0, 0.3), 1px 0px 3px;
     height: 20px;
     padding: 5px;
     border-top-left-radius: 6px;
@@ -284,6 +248,7 @@ export default {
   background-color: #545454;
   padding: 8px 20px;
   margin: -50px 0 15px;
+  border-radius: 3px;
 
   &:focus {
     outline: none;

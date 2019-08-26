@@ -9,7 +9,7 @@
       'circle--clear': clearMode
     }"
     :r="r"
-    :transform="transform"
+    :transform="transformOffset"
   />
 </template>
 
@@ -27,8 +27,12 @@ export default {
       required: true
     },
     transform: {
-      type: String,
+      type: Object,
       required: false
+    },
+    placement: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -38,6 +42,15 @@ export default {
     };
   },
   computed: {
+    transformOffset() {
+      return (
+        "matrix(1,0,0,1," +
+        Math.floor(this.transform.x + this.placement.x) +
+        "," +
+        Math.floor(this.transform.y + this.placement.y) +
+        ")"
+      );
+    },
     activeCable() {
       return this.$store.getters.activeCable;
     },
