@@ -11,7 +11,8 @@ export default {
       mode: {
         clearMode: false,
         setMode: false
-      }
+      },
+      size: {}
     },
     {
       id: "instrument-01",
@@ -20,7 +21,8 @@ export default {
       mode: {
         clearMode: false,
         setMode: false
-      }
+      },
+      size: {}
     }
   ]
 };

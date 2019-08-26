@@ -21,5 +21,11 @@ export default {
     return state.patchCables.find(cable => {
       return cable.active === true;
     });
+  },
+  instrumentSize: state => instrumentId => {
+    const i = state.instruments.find(instrument => {
+      return instrument.id === instrumentId;
+    });
+    return i.size;
   }
 };

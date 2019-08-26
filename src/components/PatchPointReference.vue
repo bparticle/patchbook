@@ -31,6 +31,8 @@ export default {
 
 <style lang="scss" scoped>
 .patchpoint-reference {
+  z-index: 1000;
+  position: absolute;
   padding: 25px 0;
   text-align: left;
   color: #545454;

@@ -54,6 +54,13 @@ export default {
       state.instruments = JSON.parse(localStorage.getItem("instruments"));
     }
   },
+  setInstrumentSize(state, payload) {
+    state.instruments.forEach(instrument => {
+      if (instrument.id === payload.instrumentId) {
+        instrument.size = payload.size;
+      }
+    });
+  },
   setNewPosition(state, payload) {
     state.instruments.forEach(instrument => {
       if (instrument.id === payload.instrument) {

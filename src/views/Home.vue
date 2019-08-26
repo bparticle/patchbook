@@ -9,17 +9,20 @@
       :id="instrument.id"
       :key="instrument.id"
     />
+    <Ghost />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Instrument from "@/components/Instrument.vue";
+import Ghost from "@/components/Ghost.vue";
 
 export default {
   name: "home",
   components: {
-    Instrument
+    Instrument,
+    Ghost
   },
   computed: {
     message() {
@@ -37,13 +40,17 @@ export default {
     }
   },
   mounted() {
+    // Reset all modes and check store
+    this.$store.commit("initializeStore");
     this.$store.commit("unselectAll");
+    this.$store.commit("modeReset");
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .home {
+  position: relative;
   margin: 50px auto;
   max-width: 900px;
 }

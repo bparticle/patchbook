@@ -1,6 +1,44 @@
 <template>
-  <div class="instrument">
+  <div ref="instrument" class="instrument">
+    <div :ref="handleId" :id="handleId" class="instrument__handle">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 25 25"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-move"
+      >
+        <polyline points="5 9 2 12 5 15" />
+        <polyline points="9 5 12 2 15 5" />
+        <polyline points="15 19 12 22 9 19" />
+        <polyline points="19 9 22 12 19 15" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <line x1="12" y1="2" x2="12" y2="22" />
+      </svg>
+    </div>
     <div class="instrument__device">
+      <button class="button button--clear-all" @click="clearPatchPoints">
+        Clear All
+      </button>
+      <button
+        class="button button--set"
+        @click="toggleSetMode"
+        :class="{ active: setMode }"
+      >
+        {{ clickAction }}
+      </button>
+      <button
+        class="button button--clear"
+        :class="{ active: clearMode }"
+        @click="toggleClearMode"
+      >
+        Clear
+      </button>
       <transition name="fade">
         <PatchPointDialog
           v-if="infoDialog"
@@ -45,29 +83,13 @@
       </svg>
       <img class="instrument__img" ref="img" :src="imgSrcPath" alt />
     </div>
-    <button
-      class="button button--set"
-      @click="toggleSetMode"
-      :class="{ active: setMode }"
-    >
-      {{ clickAction }}
-    </button>
-    <button
-      class="button button--clear"
-      :class="{ active: clearMode }"
-      @click="toggleClearMode"
-    >
-      Clear
-    </button>
-    <button class="button button--clear-all" @click="clearPatchPoints">
-      Clear All
-    </button>
-
     <PatchPointReference :instrument="id" />
   </div>
 </template>
 
 <script>
+/* global Draggable */
+
 import PatchPoint from "@/components/PatchPoint";
 import PatchCable from "@/components/PatchCable";
 import PatchPointDialog from "@/components/PatchPointDialog";
@@ -95,11 +117,16 @@ export default {
     return {
       infoDialog: false,
       clickEvent: "",
-      size: null,
       svgViewBox: null
     };
   },
   computed: {
+    handleId() {
+      return "handle" + this.id;
+    },
+    size() {
+      return this.$store.getters.instrumentSize(this.id);
+    },
     imgSrcPath() {
       return "/img/" + this.imgSrc;
     },
@@ -146,12 +173,13 @@ export default {
       }
     },
     setSize() {
-      this.size = {
-        w: this.$refs.img.width,
-        h: this.$refs.img.height,
-        nW: this.$refs.img.naturalWidth,
-        nH: this.$refs.img.naturalHeight
-      };
+      this.$store.commit("setInstrumentSize", {
+        instrumentId: this.id,
+        size: {
+          w: this.$refs.img.width,
+          h: this.$refs.img.height
+        }
+      });
       this.svgViewBox = "0 0 " + this.size.w + " " + this.size.h;
     },
     toggleSetMode() {
@@ -175,18 +203,28 @@ export default {
         localStorage.setItem("instruments", JSON.stringify(state.instruments));
       }, 500);
     });
-    this.$store.commit("initializeStore");
-    this.$store.commit("modeReset");
+    // Make draggable
+    const grabber = document.getElementById(this.handleId);
+    this.draggable = Draggable.create(this.$refs.instrument, {
+      type: "x,y",
+      cursor: "grab",
+      trigger: grabber
+    });
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .instrument {
+  &__handle {
+    position: absolute;
+    margin-top: -30px;
+  }
   &__device {
     position: relative;
   }
   &__img {
+    vertical-align: bottom;
     max-width: 100%;
   }
   &__stage {
@@ -202,19 +240,27 @@ export default {
 }
 
 .button {
+  position: absolute;
   border: 0;
   color: #fff;
   background-color: #545454;
   padding: 8px 20px;
-  margin: 15px 25px;
+  margin: -50px 25px 15px;
 
   &:focus {
     outline: none;
   }
   &--set {
+    right: 172px;
     &.active {
       background-color: #287e94;
     }
+  }
+  &--clear {
+    right: 95px;
+  }
+  &--clear-all {
+    right: 0;
   }
 }
 .fade-enter-active,
