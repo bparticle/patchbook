@@ -1,5 +1,5 @@
 <template>
-  <div ref="instrument" class="instrument">
+  <div ref="instrument" class="instrument" :style="leftTop">
     <div :ref="handleId" :id="handleId" class="instrument__handle">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -7,7 +7,6 @@
         height="20"
         viewBox="0 0 25 25"
         fill="none"
-        stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -31,13 +30,6 @@
         :class="{ active: setMode }"
       >
         {{ clickAction }}
-      </button>
-      <button
-        class="button button--clear"
-        :class="{ active: clearMode }"
-        @click="toggleClearMode"
-      >
-        Clear
       </button>
       <transition name="fade">
         <PatchPointDialog
@@ -121,6 +113,18 @@ export default {
     };
   },
   computed: {
+    leftTop() {
+      return {
+        left: this.instrumentDimensions.x + "px",
+        top: this.instrumentDimensions.y + "px"
+      };
+    },
+    instrumentDimensions() {
+      return this.$store.getters.instrumentDimensions(this.id);
+    },
+    instrumentOffset() {
+      return this.$store.getters.instrumentOffset(this.id);
+    },
     handleId() {
       return "handle" + this.id;
     },
@@ -178,6 +182,10 @@ export default {
         size: {
           w: this.$refs.img.width,
           h: this.$refs.img.height
+        },
+        offset: {
+          x: this.$refs.instrument.offsetLeft,
+          y: this.$refs.instrument.offsetTop
         }
       });
       this.svgViewBox = "0 0 " + this.size.w + " " + this.size.h;
@@ -196,6 +204,13 @@ export default {
   },
   mounted() {
     this.$refs.img.onload = this.setSize;
+    this.$store.commit("moveGhost", {
+      instrumentId: this.id,
+      position: {
+        left: 0,
+        top: 0
+      }
+    });
     // Subscribe to changes in Vuex store and save to local storage
     this.$store.subscribe((mutation, state) => {
       // Store the state object as a JSON string // wait for all mutations and data to arrive
@@ -204,28 +219,51 @@ export default {
       }, 500);
     });
     // Make draggable
+    const vm = this;
     const grabber = document.getElementById(this.handleId);
     this.draggable = Draggable.create(this.$refs.instrument, {
-      type: "x,y",
+      type: "top,left",
       cursor: "grab",
-      trigger: grabber
+      trigger: grabber,
+      zIndexBoost: false,
+      onDrag: function() {
+        vm.$store.commit("moveGhost", {
+          instrumentId: vm.id,
+          position: {
+            left: this.x,
+            top: this.y
+          }
+        });
+      }
     });
+    setTimeout(() => {
+      this.$refs.instrument.style.left = this.instrumentDimensions.x + "px";
+      this.$refs.instrument.style.top = this.instrumentDimensions.y + "px";
+    }, 20);
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .instrument {
+  position: absolute;
   &__handle {
     position: absolute;
     margin-top: -30px;
+    left: 2px;
+    stroke: rgb(77, 77, 77);
+    background: rgb(236, 236, 236);
+    box-shadow: 1px 0px 3px;
+    height: 20px;
+    padding: 5px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
   }
   &__device {
     position: relative;
   }
   &__img {
     vertical-align: bottom;
-    max-width: 100%;
   }
   &__stage {
     position: absolute;
@@ -245,19 +283,16 @@ export default {
   color: #fff;
   background-color: #545454;
   padding: 8px 20px;
-  margin: -50px 25px 15px;
+  margin: -50px 0 15px;
 
   &:focus {
     outline: none;
   }
   &--set {
-    right: 172px;
+    right: 105px;
     &.active {
       background-color: #287e94;
     }
-  }
-  &--clear {
-    right: 95px;
   }
   &--clear-all {
     right: 0;

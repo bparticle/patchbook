@@ -47,6 +47,12 @@ export default {
       y: event.offsetY
     };
   },
+  moveGhost(state, payload) {
+    const i = state.instruments.find(instrument => {
+      return payload.instrumentId === instrument.id;
+    });
+    i.position = payload.position;
+  },
   initializeStore(state) {
     // Check if patch points are stored in browser memory
     if (localStorage.getItem("instruments")) {
@@ -54,10 +60,19 @@ export default {
       state.instruments = JSON.parse(localStorage.getItem("instruments"));
     }
   },
+  resetPositions(state) {
+    state.instruments.forEach(instrument => {
+      instrument.position = {
+        left: "0px",
+        top: "0px"
+      };
+    });
+  },
   setInstrumentSize(state, payload) {
     state.instruments.forEach(instrument => {
       if (instrument.id === payload.instrumentId) {
         instrument.size = payload.size;
+        instrument.offset = payload.offset;
       }
     });
   },

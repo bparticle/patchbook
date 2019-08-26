@@ -51,8 +51,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   position: relative;
-  margin: 50px auto;
-  max-width: 900px;
+  margin-top: 50px;
 }
 .messages {
   top: 50px;

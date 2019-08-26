@@ -12,7 +12,18 @@ export default {
         clearMode: false,
         setMode: false
       },
-      size: {}
+      size: {
+        w: 0,
+        h: 0
+      },
+      position: {
+        left: "0px",
+        top: "0px"
+      },
+      offset: {
+        x: 0,
+        y: 0
+      }
     },
     {
       id: "instrument-01",
@@ -22,7 +33,18 @@ export default {
         clearMode: false,
         setMode: false
       },
-      size: {}
+      size: {
+        w: 0,
+        h: 0
+      },
+      position: {
+        left: 0,
+        top: 0
+      },
+      offset: {
+        x: 0,
+        y: 0
+      }
     }
   ]
 };
