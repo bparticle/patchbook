@@ -11,15 +11,16 @@ export default {
       patchPoints: [],
       mode: {
         clearMode: false,
-        setMode: false
+        setMode: false,
+        reference: false
       },
       size: {
         w: 0,
         h: 0
       },
       position: {
-        left: "0px",
-        top: "0px"
+        left: 0,
+        top: 0
       },
       offset: {
         x: 0,

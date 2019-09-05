@@ -58,14 +58,6 @@ export default {
       state.instruments = JSON.parse(localStorage.getItem("instruments"));
     }
   },
-  resetPositions(state) {
-    state.instruments.forEach(instrument => {
-      instrument.position = {
-        left: "0px",
-        top: "0px"
-      };
-    });
-  },
   setInstrumentSize(state, payload) {
     state.instruments.forEach(instrument => {
       if (instrument.id === payload.instrumentId) {
@@ -127,6 +119,16 @@ export default {
     });
     i.mode.setMode = !i.mode.setMode;
     i.mode.clearMode = false;
+    i.mode.setMode === true
+      ? (i.mode.reference = true)
+      : (i.mode.reference = false);
+  },
+  toggleReference(state, instrumentId) {
+    const i = state.instruments.find(instrument => {
+      return instrument.id === instrumentId;
+    });
+    i.mode.reference = !i.mode.reference;
+    console.log(i.mode.reference);
   },
   toggleClearMode(state, instrumentId) {
     const i = state.instruments.find(instrument => {

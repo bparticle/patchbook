@@ -46,13 +46,35 @@
         :src="imgSrcPath"
       />
     </div>
-    <PatchPointReference :instrument="id" />
+    <div
+      class="instrument__toggle-reference"
+      :class="{ 'instrument__toggle-reference--open': reference }"
+      @click="toggleReference"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-chevrons-up"
+      >
+        <polyline points="17 11 12 6 7 11" />
+        <polyline points="17 18 12 13 7 18" />
+      </svg>
+    </div>
+    <transition name="slide">
+      <PatchPointReference v-show="reference" :instrument="id" />
+    </transition>
   </div>
 </template>
 
 <script>
 /* global Draggable */
-
 import PatchPointDialog from "@/components/PatchPointDialog";
 import PatchPointReference from "@/components/PatchPointReference";
 
@@ -106,6 +128,9 @@ export default {
     },
     setMode() {
       return this.$store.getters.setMode(this.id);
+    },
+    reference() {
+      return this.$store.getters.reference(this.id);
     },
     clearMode() {
       return this.$store.getters.clearMode(this.id);
@@ -161,6 +186,9 @@ export default {
     toggleClearMode() {
       this.$store.commit("toggleClearMode", this.id);
       this.$store.commit("unselectAll", this.id);
+    },
+    toggleReference() {
+      this.$store.commit("toggleReference", this.id);
     },
     clearPatchPoints() {
       this.$store.commit("clearPatchPoints", this.id);
@@ -233,10 +261,18 @@ export default {
     position: absolute;
     fill: transparent;
   }
-  &__rect {
-    fill: transparent;
-    &--set {
-      fill: rgba($color: #15c, $alpha: 0.3);
+  &__toggle-reference {
+    z-index: 5;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    bottom: -35px;
+    color: rgb(77, 77, 77);
+    transform: rotate(180deg);
+    transition: all 0.3s;
+
+    &--open {
+      transform: rotate(0deg);
     }
   }
 }
@@ -270,5 +306,15 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s;
+}
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+  margin-top: -150px;
 }
 </style>

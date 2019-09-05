@@ -67,15 +67,15 @@ export default {
       return this.$store.state.patchingMode;
     }
   },
-  watch: {
-    setMode() {
-      if (this.setMode === false) {
-        this.draggable[0].disable();
-      } else {
-        this.draggable[0].enable();
-      }
-    }
-  },
+  // watch: {
+  //   setMode() {
+  //     if (this.setMode === false) {
+  //       this.draggable[0].disable();
+  //     } else {
+  //       this.draggable[0].enable();
+  //     }
+  //   }
+  // },
   methods: {
     clickPatchPoint() {
       this.selectPatchPoint();
@@ -133,25 +133,28 @@ export default {
           return Math.round(value / 3) * 3;
         }
       },
-      onDragEnd: function() {
+      onDrag: function() {
         vm.$store.commit("setNewPosition", {
           instrument: vm.instrument,
           id: vm.id,
-          transform: window
-            .getComputedStyle(vm.$refs.circle)
-            .getPropertyValue("transform")
+          transform: {
+            x: this.endX - vm.placement.x,
+            y: this.endY - vm.placement.y
+          }
         });
       }
     });
-    if (!this.setMode) {
-      this.draggable[0].disable();
-    }
+    // if (!this.setMode) {
+    //   this.draggable[0].disable();
+    // }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .circle {
+  pointer-events: auto;
+  z-index: 500000;
   fill: rgba(88, 87, 87, 0.5);
   stroke: rgba(23, 124, 243, 0.3);
   stroke-width: 3px;

@@ -31,12 +31,20 @@ export default {
 
 <style lang="scss" scoped>
 .patchpoint-reference {
-  z-index: 1000;
+  z-index: -1;
   position: absolute;
   padding: 25px 0;
   text-align: left;
   color: #545454;
   font-size: 0.8em;
+  background-color: white;
+  padding: 0 20px 20px;
+  left: 0;
+  right: 0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.4);
+
   &__patchpoint {
     &.selected {
       animation: colorPulseSet 0.4s infinite alternate;

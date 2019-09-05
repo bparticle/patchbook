@@ -11,6 +11,12 @@ export default {
     });
     return i.mode.setMode;
   },
+  reference: state => instrumentId => {
+    const i = state.instruments.find(instrument => {
+      return instrument.id === instrumentId;
+    });
+    return i.mode.reference;
+  },
   clearMode: state => instrumentId => {
     const i = state.instruments.find(instrument => {
       return instrument.id === instrumentId;

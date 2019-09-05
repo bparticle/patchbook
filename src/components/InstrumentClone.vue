@@ -1,7 +1,9 @@
 <template>
   <g>
     <rect
+      ref="rect"
       class="instrument-clone"
+      :class="{ 'instrument-clone--set': setMode }"
       :style="instrumentDimensions"
       :x="instrumentOffset.x"
       :y="instrumentOffset.y"
@@ -51,18 +53,22 @@ export default {
     },
     patchCables() {
       return this.$store.state.patchCables;
+    },
+    setMode() {
+      return this.$store.getters.setMode(this.instrumentId);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-rect {
+.instrument-clone {
   fill: transparent;
-  stroke: rgba($color: #15c, $alpha: 0.3);
   stroke-width: 4px;
   &--set {
-    fill: rgba($color: #15c, $alpha: 0.3);
+    stroke-linejoin: round;
+    stroke: rgba($color: #15c, $alpha: 0.7);
+    stroke-width: 5px;
   }
 }
 </style>

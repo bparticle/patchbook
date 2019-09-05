@@ -63,9 +63,12 @@ export default {
   background-color: #fff;
   z-index: 5;
   box-shadow: 0 0 5px rgba(25, 25, 50, 0.5);
+  border-radius: 3px;
 }
 
 input {
+  padding: 10px 15px;
+  font-size: 18px;
   clear: both;
   display: block;
 }

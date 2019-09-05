@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" key="rnd">
     <header :style="deskSize">
       <button class="button" @click="resetPositions">Reset</button>
       <div id="nav">
@@ -16,10 +16,18 @@ export default {
   name: "App",
   methods: {
     resetPositions() {
-      this.$store.commit("resetPositions");
+      this.$store.dispatch("resetPositions").then(() => {
+        this.rnd = this.generateRnd;
+      });
+    },
+    generateRnd() {
+      return Math.floor(100000 + Math.random() * 900000);
     }
   },
   computed: {
+    rnd() {
+      return this.generateRnd();
+    },
     deskSize() {
       return {
         width: this.$store.state.deskSize + "px"

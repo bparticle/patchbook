@@ -31,7 +31,8 @@ export default {
 
 <style lang="scss" scoped>
 .ghost {
-  z-index: 5;
+  overflow: visible;
+  z-index: 5; // Important to keep patch points on the forefront
   pointer-events: none;
   position: absolute;
   top: 0;
