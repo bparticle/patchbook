@@ -1,29 +1,11 @@
 # patchbook
 
-## Project setup
-```
-npm install
-```
+A visual way to store and recall patches for modular synthesizers. This is a work in progress!
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Features on the so called Road Map:
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* Multiple users with personal patch repositories
+* User uploaded instruments
+* User generated instrument specifications with patch points and controls
+* Share patches with the community
+* Integration with https://www.modulargrid.net/
