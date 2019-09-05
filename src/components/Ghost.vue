@@ -1,6 +1,6 @@
 <template>
   <div class="ghost">
-    <svg :width="deskSize" :height="deskSize">
+    <svg class="ghost__svg" :width="deskSize" :height="deskSize">
       <InstrumentClone
         v-for="instrument in instruments"
         :instrumentId="instrument.id"
@@ -37,5 +37,9 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+
+  &__svg {
+    overflow: visible;
+  }
 }
 </style>
