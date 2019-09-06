@@ -51,6 +51,15 @@ export default {
     });
     i.position = payload.position;
   },
+  updatePatchpointPosition(state, payload) {
+    const i = state.instruments.find(instrument => {
+      return payload.instrumentId === instrument.id;
+    });
+    i.patchPoints.forEach(patchpoint => {
+      patchpoint.placement.left = payload.movement.x;
+      patchpoint.placement.top = payload.movement.y;
+    });
+  },
   initializeStore(state) {
     // Check if patch points are stored in browser memory
     if (localStorage.getItem("instruments")) {
@@ -119,9 +128,12 @@ export default {
     });
     i.mode.setMode = !i.mode.setMode;
     i.mode.clearMode = false;
-    i.mode.setMode === true
-      ? (i.mode.reference = true)
-      : (i.mode.reference = false);
+    // Set instrument states
+    if (i.mode.setMode === true) {
+      i.mode.reference = true;
+    } else {
+      i.mode.reference = false;
+    }
   },
   toggleReference(state, instrumentId) {
     const i = state.instruments.find(instrument => {

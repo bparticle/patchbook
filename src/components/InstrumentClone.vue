@@ -19,6 +19,7 @@
       :placement="instrumentDimensions"
       :id="patchPoint.id"
       :key="patchPoint.id"
+      :selected="patchPoint.selected"
       :transform="patchPoint.transform"
       :instrument="instrumentId"
     />
