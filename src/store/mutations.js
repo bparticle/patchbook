@@ -93,7 +93,11 @@ export default {
       if (payload.instrument === instrument.id) {
         instrument.patchPoints.forEach(patchPoint => {
           if (patchPoint.id === payload.id) {
-            patchPoint.selected = true;
+            if (patchPoint.selected === true) {
+              patchPoint.selected = false;
+            } else {
+              patchPoint.selected = true;
+            }
           } else {
             patchPoint.selected = false;
           }
@@ -142,7 +146,6 @@ export default {
       return instrument.id === instrumentId;
     });
     i.mode.reference = !i.mode.reference;
-    console.log(i.mode.reference);
   },
   toggleClearMode(state, instrumentId) {
     const i = state.instruments.find(instrument => {
