@@ -3,13 +3,14 @@
     :id="id"
     @click="clickPatchPoint"
     ref="circle"
-    class="circle circle--patch-point"
+    class="patchpoint"
     :class="{
-      'circle--set': setMode,
-      'circle--clear': clearMode
+      'patchpoint--set': setMode,
+      'patchpoint--clear': clearMode,
+      'patchpoint--selected': selected
     }"
     :r="r"
-    :transform="transformOffset"
+    :transform="matrix"
   />
 </template>
 
@@ -28,11 +29,15 @@ export default {
     },
     transform: {
       type: Object,
-      required: false
+      required: true
     },
     placement: {
       type: Object,
       required: true
+    },
+    selected: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -42,15 +47,6 @@ export default {
     };
   },
   computed: {
-    transformOffset() {
-      return (
-        "matrix(1,0,0,1," +
-        Math.floor(this.transform.x + this.placement.x) +
-        "," +
-        Math.floor(this.transform.y + this.placement.y) +
-        ")"
-      );
-    },
     activeCable() {
       return this.$store.getters.activeCable;
     },
@@ -65,17 +61,22 @@ export default {
     },
     patchingMode() {
       return this.$store.state.patchingMode;
+    },
+    matrix() {
+      return (
+        "matrix(1,0,0,1," + this.transform.x + "," + this.transform.y + ")"
+      );
     }
   },
-  // watch: {
-  //   setMode() {
-  //     if (this.setMode === false) {
-  //       this.draggable[0].disable();
-  //     } else {
-  //       this.draggable[0].enable();
-  //     }
-  //   }
-  // },
+  watch: {
+    setMode() {
+      if (this.setMode === false) {
+        this.draggable[0].disable();
+      } else {
+        this.draggable[0].enable();
+      }
+    }
+  },
   methods: {
     clickPatchPoint() {
       this.selectPatchPoint();
@@ -133,33 +134,44 @@ export default {
           return Math.round(value / 3) * 3;
         }
       },
-      onDrag: function() {
+      onDragEnd: function() {
         vm.$store.commit("setNewPosition", {
           instrument: vm.instrument,
           id: vm.id,
           transform: {
-            x: this.endX - vm.placement.x,
-            y: this.endY - vm.placement.y
+            x: this.endX,
+            y: this.endY
           }
         });
       }
     });
-    // if (!this.setMode) {
-    //   this.draggable[0].disable();
-    // }
+    if (!this.setMode) {
+      this.draggable[0].disable();
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.circle {
+.patchpoint {
   pointer-events: auto;
   z-index: 500000;
   fill: rgba(88, 87, 87, 0.5);
   stroke: rgba(23, 124, 243, 0.3);
   stroke-width: 3px;
-  // transform: translate(0 0) !important;
   &--set {
+    stroke: rgba(23, 240, 200, 1);
+  }
+  &--selected {
+    animation: colorPulseSelected 0.6s infinite alternate;
+  }
+}
+
+@keyframes colorPulseSelected {
+  0% {
+    stroke: rgb(255, 255, 255);
+  }
+  100% {
     stroke: rgba(23, 240, 200, 1);
   }
 }

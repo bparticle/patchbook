@@ -6,6 +6,7 @@
       v-for="patchPoint in patchPoints"
       :key="patchPoint.id"
       :class="{ selected: patchPoint.selected }"
+      @click="selectPatchPoint(patchPoint.id)"
     >
       > {{ patchPoint.name }}
     </div>
@@ -24,6 +25,14 @@ export default {
   computed: {
     patchPoints() {
       return this.$store.getters.patchPoints(this.instrument);
+    }
+  },
+  methods: {
+    selectPatchPoint(id) {
+      this.$store.commit("selectPatchPoint", {
+        id: id,
+        instrument: this.instrument
+      });
     }
   }
 };
@@ -46,18 +55,13 @@ export default {
   box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.4);
 
   &__patchpoint {
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 3px;
+    padding: 2px 5px;
     &.selected {
-      animation: colorPulseSet 0.4s infinite alternate;
+      margin-left: 15px;
     }
-  }
-}
-
-@keyframes colorPulseSet {
-  0% {
-    background-color: transparent;
-  }
-  100% {
-    background-color: greenyellow;
   }
 }
 </style>

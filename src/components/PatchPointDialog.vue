@@ -1,6 +1,5 @@
 <template>
   <div class="patchpoint-dialog" :style="position">
-    <label for="pp-name">Patch point description</label>
     <input
       ref="input"
       v-model="input"
@@ -58,6 +57,7 @@ export default {
 
 <style lang="scss" scoped>
 .patchpoint-dialog {
+  display: flex;
   position: absolute;
   padding: 25px;
   background-color: #fff;

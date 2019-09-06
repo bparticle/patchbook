@@ -1,12 +1,10 @@
 <template>
-  <g>
+  <g :style="instrumentOffset">
     <rect
       ref="rect"
       class="instrument-clone"
       :class="{ 'instrument-clone--set': setMode }"
       :style="instrumentDimensions"
-      :x="instrumentOffset.x"
-      :y="instrumentOffset.y"
     ></rect>
     <PatchCable
       v-for="patchCable in patchCables"
@@ -16,9 +14,10 @@
     />
     <PatchPoint
       v-for="patchPoint in patchPoints"
-      :placement="instrumentDimensions"
       :id="patchPoint.id"
       :key="patchPoint.id"
+      :placement="instrumentOffset"
+      :selected="patchPoint.selected"
       :transform="patchPoint.transform"
       :instrument="instrumentId"
     />
@@ -46,7 +45,10 @@ export default {
       return this.$store.getters.instrumentDimensions(this.instrumentId);
     },
     instrumentOffset() {
-      return this.$store.getters.instrumentOffset(this.instrumentId);
+      const o = this.$store.getters.instrumentOffset(this.instrumentId);
+      return {
+        transform: "matrix(1,0,0,1," + o.x + "," + o.y + ")"
+      };
     },
     patchPoints() {
       return this.$store.getters.patchPoints(this.instrumentId);
