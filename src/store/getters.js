@@ -50,9 +50,7 @@ export default {
     });
     return {
       width: i.size.w,
-      height: i.size.h,
-      x: i.position.left,
-      y: i.position.top
+      height: i.size.h
     };
   },
   instrumentOffset: state => instrumentId => {
@@ -60,8 +58,8 @@ export default {
       return instrument.id === instrumentId;
     });
     return {
-      x: i.offset.x,
-      y: i.offset.y
+      x: i.position.left,
+      y: i.position.top
     };
   }
 };

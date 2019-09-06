@@ -10,7 +10,7 @@
       'patchpoint--selected': selected
     }"
     :r="r"
-    :transform="transformOffset"
+    :transform="matrix"
   />
 </template>
 
@@ -29,7 +29,7 @@ export default {
     },
     transform: {
       type: Object,
-      required: false
+      required: true
     },
     placement: {
       type: Object,
@@ -47,15 +47,6 @@ export default {
     };
   },
   computed: {
-    transformOffset() {
-      return (
-        "matrix(1,0,0,1," +
-        Math.floor(this.transform.x + this.placement.x) +
-        "," +
-        Math.floor(this.transform.y + this.placement.y) +
-        ")"
-      );
-    },
     activeCable() {
       return this.$store.getters.activeCable;
     },
@@ -70,6 +61,11 @@ export default {
     },
     patchingMode() {
       return this.$store.state.patchingMode;
+    },
+    matrix() {
+      return (
+        "matrix(1,0,0,1," + this.transform.x + "," + this.transform.y + ")"
+      );
     }
   },
   watch: {
@@ -143,8 +139,8 @@ export default {
           instrument: vm.instrument,
           id: vm.id,
           transform: {
-            x: this.endX + vm.placement.x,
-            y: this.endY + vm.placement.y
+            x: this.endX,
+            y: this.endY
           }
         });
       }

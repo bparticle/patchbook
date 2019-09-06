@@ -1,5 +1,7 @@
 export default {
   addPatchPoint(state, payload) {
+    console.log(payload.event);
+
     state.instruments.forEach(instrument => {
       if (instrument.id === payload.instrument) {
         instrument.patchPoints.push({

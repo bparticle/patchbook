@@ -226,17 +226,6 @@ export default {
             top: this.y
           }
         });
-      },
-      onDragEnd: function() {
-        console.log(this);
-
-        vm.$store.commit("updatePatchpointPosition", {
-          instrumentId: vm.id,
-          movement: {
-            x: this.endX,
-            y: this.endY
-          }
-        });
       }
     });
     setTimeout(() => {
