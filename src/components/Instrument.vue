@@ -109,7 +109,7 @@ export default {
       };
     },
     instrumentDimensions() {
-      return this.$store.getters.instrumentDimensions(this.id);
+      return this.$store.getters.instrumentOffset(this.id);
     },
     handleId() {
       return "handle" + this.id;
